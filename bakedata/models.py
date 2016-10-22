@@ -26,6 +26,6 @@ class Ratio(models.Model):
 
 	def __str__(self):
 				
-		return ('{0} in {1}'.format(ingredient.name,formula.name))
+		return ('{0:<20} in {1:>20}'.format(self.ingredient.name,self.formula.name))
 
 	
