@@ -19,13 +19,30 @@ class Formula(models.Model):
 	def __str__(self):
 		return self.name
 
+class Soaker(models.Model):
+	formula=models.OneToOneField(Formula, primary_key=True)
+
 class Ratio(models.Model):
 	ingredient = models.ForeignKey(Ingredient)
 	formula = models.ForeignKey(Formula)
 	ratio = models.DecimalField(max_digits=5,decimal_places=2)
-
+	
+	
 	def __str__(self):
 				
-		return ('{0:<20} in {1:>20}'.format(self.ingredient.name,self.formula.name))
+		return ('{0:<20} in {1:>20}'.format(
+					self.ingredient.name,self.formula.name))
+	
+	class Meta:
+		unique_together=('ingredient','formula')
 
+class Load(models.Model):
+	formula = models.ForeignKey(Formula)
+	loaf_mass = models.DecimalField(max_digits=6,decimal_places=3)
+	number_of_loaves = models.IntegerField()
+	#recipe = 
+
+#class Recipe:
+	# recipe is similar to ration take many to many of Load and Ingredient
+	# returns a calculated amount based on load.formula and ingredient.
 	
