@@ -24,4 +24,8 @@ class Ratio(models.Model):
 	formula = models.ForeignKey(Formula)
 	ratio = models.DecimalField(max_digits=5,decimal_places=2)
 
+	def __str__(self):
+				
+		return ('{0} in {1}'.format(ingredient.name,formula.name))
+
 	
