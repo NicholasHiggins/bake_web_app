@@ -20,11 +20,6 @@ class Formula(models.Model):
 	def __str__(self):
 		return self.name
 
-#class Soaker(models.Model):
-#	formula=models.OneToOneField(Formula, primary_key=True)
-#	ingredients = models.ManyToManyField(Ingredient,
-#			 through='SoakerRatio')
-
 class Ratio(models.Model):
 	ingredient = models.ForeignKey(Ingredient)
 	formula = models.ForeignKey(Formula)
@@ -54,14 +49,14 @@ class SoakerRatio(models.Model):
 		unique_together=('ingredient','formula')
 
 
-
+"""
 class Load(models.Model):
 	formula = models.ForeignKey(Formula)
 	loaf_mass = models.DecimalField(
 					max_digits=6,decimal_places=3)
 	number_of_loaves = models.IntegerField()
 	#recipe = 
-
+"""
 #class Recipe:
 	# recipe is similar to ration take many to many of Load and Ingredient
 	# returns a calculated amount based on load.formula and ingredient.

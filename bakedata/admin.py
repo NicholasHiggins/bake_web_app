@@ -20,8 +20,8 @@ class FormulaAdmin(admin.ModelAdmin):
 	
 admin.site.register(Formula,FormulaAdmin)
 
-#class SoakerRatioInline(admin.StackedInline):
-#		model = SoakerRatio
-#		extra = 1
+class SoakerRatioInline(admin.StackedInline):
+		model = SoakerRatio
+		extra = 1
 
 # Register your models here.

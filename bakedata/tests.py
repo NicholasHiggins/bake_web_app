@@ -67,4 +67,4 @@ class ModelsTestCase(TestCase):
 		self.assertEqual(100,r1.ratio)
 
 	def test_formula_has_a_soaker(self):
-		pass
+		

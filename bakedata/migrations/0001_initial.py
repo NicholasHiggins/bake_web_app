@@ -13,14 +13,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Formula',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('name', models.CharField(max_length=60)),
             ],
         ),
         migrations.CreateModel(
             name='Ingredient',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('name', models.CharField(max_length=30)),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=6)),
             ],
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Load',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('loaf_mass', models.DecimalField(decimal_places=3, max_digits=6)),
                 ('number_of_loaves', models.IntegerField()),
                 ('formula', models.ForeignKey(to='bakedata.Formula')),
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ratio',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('ratio', models.DecimalField(decimal_places=2, max_digits=5)),
                 ('formula', models.ForeignKey(to='bakedata.Formula')),
                 ('ingredient', models.ForeignKey(to='bakedata.Ingredient')),
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SoakerRatio',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('ratio', models.DecimalField(decimal_places=2, max_digits=5)),
                 ('formula', models.ForeignKey(to='bakedata.Formula')),
                 ('ingredient', models.ForeignKey(to='bakedata.Ingredient')),
@@ -55,12 +55,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='formula',
             name='ingredients',
-            field=models.ManyToManyField(through='bakedata.Ratio', related_name='Ratio', to='bakedata.Ingredient'),
+            field=models.ManyToManyField(to='bakedata.Ingredient', related_name='Ratio', through='bakedata.Ratio'),
         ),
         migrations.AddField(
             model_name='formula',
             name='soaker',
-            field=models.ManyToManyField(through='bakedata.SoakerRatio', related_name='SoakerRatio', to='bakedata.Ingredient'),
+            field=models.ManyToManyField(to='bakedata.Ingredient', related_name='SoakerRatio', through='bakedata.SoakerRatio'),
         ),
         migrations.AlterUniqueTogether(
             name='soakerratio',
