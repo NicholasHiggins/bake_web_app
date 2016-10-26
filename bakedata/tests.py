@@ -1,19 +1,19 @@
 from django.test import TestCase
-from .models import Ingredient, Formula, Ratio
+from .models import *
 
 
 class ModelsTestCase(TestCase):
 	def setUp(self):
-		i1=Ingredient.objects.create(name='ingredientONE',
+		self.i1=Ingredient.objects.create(name='ingredientONE',
 					amount=1234.56)
-		i2=Ingredient.objects.create(
+		self.i2=Ingredient.objects.create(
 					name='ingredientTWO',amount=2222.22)	
-		f1=Formula.objects.create(name='formulaONE')		
-		f2=Formula.objects.create(name='formulaTWO')	
-		r1=Ratio.objects.create(formula=f1,
-						ingredient=i1, ratio=100)		
-		r2=Ratio.objects.create(formula=f1,
-						ingredient=i2, ratio=65)
+		self.f1=Formula.objects.create(name='formulaONE')		
+		self.f2=Formula.objects.create(name='formulaTWO')	
+		self.r1=Ratio.objects.create(formula=self.f1,
+						ingredient=self.i1, ratio=100)		
+		self.r2=Ratio.objects.create(formula=self.f1,
+						ingredient=self.i2, ratio=65)
 
 
 	def test_no_duplicate_formula_ingredient_ratios(self):
@@ -67,4 +67,14 @@ class ModelsTestCase(TestCase):
 		self.assertEqual(100,r1.ratio)
 
 	def test_formula_has_a_soaker(self):
+	#	i1=Ingredient.objects.create(
+	#					name='White',amount=100.00)		
+	#	f1=Formula.objects.create(name='formulaONE')
+		self.assertTrue(self.f1.soaker)
+		sr1=SoakerRatio.objects.create(
+					formula=self.f1,ingredient=self.i1,ratio=65)
+		self.assertNotEqual(self.f1.soaker,'')
 		
+	def test_formula_method_total_percent(self):
+		t=self.f1.total_percent()
+		self.assertEqual(t,165)
