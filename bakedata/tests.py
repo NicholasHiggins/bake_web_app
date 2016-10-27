@@ -13,9 +13,9 @@ class ModelsTestCase(TestCase):
 		self.r1=Ratio.objects.create(formula=self.f1,
 						ingredient=self.i1, ratio=100)		
 		self.r2=Ratio.objects.create(formula=self.f1,
-						ingredient=self.i2, ratio=100)
+						ingredient=self.i2, ratio=25)
 		self.l1=Load(formula=self.f1, loaf_mass=1,
-				number_of_loaves = 2)
+				number_of_loaves = 5)
 
 
 	def test_no_duplicate_formula_ingredient_ratios(self):
@@ -43,6 +43,10 @@ class ModelsTestCase(TestCase):
 		self.assertEqual(i1.amount,1234.56)
 		self.assertEqual(i2.name,'ingredientTWO')
 		self.assertEqual(i2.amount,2222.22)
+
+	def test_can_debit_ingredient_amount(self):
+		self.i1.debit(1000)
+		self.assertEqual(self.i1.amount,234.56)
 
 	def test_can_retrieve_object_info(self):
 		ingredient= Ingredient.objects.get(
@@ -79,13 +83,13 @@ class ModelsTestCase(TestCase):
 		
 	def test_formula_method_total_percent(self):
 		t=self.f1.total_percent()
-		self.assertEqual(t,200)
+		self.assertEqual(t,125)
 
 	def test_Load_method_total_mass(self):
-		self.assertEqual(self.l1.total_mass(),2.0)
+		self.assertEqual(self.l1.total_mass(),5.0)
 
 	def test_Load_method_recipe(self):
 		K=self.l1.recipe()
-		self.assertEqual(K[self.i1.name],1)
+		self.assertEqual(K[self.i1.name],4)
 		self.assertEqual(K[self.i2.name],1)
 

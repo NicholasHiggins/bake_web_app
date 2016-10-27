@@ -8,6 +8,9 @@ class Ingredient(models.Model):
 	def __str__(self):
 		return self.name
 
+	def debit(self,value):
+		self.amount= round(self.amount-value,2)
+
 class Formula(models.Model):
 	# represents the baker's percentage relationship between 
 	# Ingredients. Needs to provide for special case where a 
@@ -63,8 +66,6 @@ class Load(models.Model):
 	loaf_mass = models.DecimalField(
 					max_digits=6,decimal_places=3)
 	number_of_loaves = models.IntegerField()
-#	ingredients = models.ManyToManyField(Ingredient, through=
-#				'Recipe', related_name='Recipe')
 	
 	def total_mass(self):
 		return float(self.loaf_mass*self.number_of_loaves)
@@ -82,20 +83,4 @@ class Load(models.Model):
 			s='soaker'+item.ingredient.name
 			T[s]=k*item.ratio*self.soaker_percent/100		
 		return T	
-"""This is all wrong, need to define the recipe within load, as a method by iterating through the ingredients in formula"""
 
-#class Recipe(models.Model):
-#	ingredient = models.ForeignKey(Ingredient)
-#	load = models.ForeignKey(Load)
-
-	#propertyrec
-#	def amountinloadmethod(self):
-#		k = load.total_mass / load.formula.total_percent					
-#		t = Ratio.objects.get(formula__exact=load.formula,
-#						ingredient__exact=ingredient)
-#		amount=k*t.ratio
-#		
-#		return amount		
-#	
-#	amount_in_load = property(amountinloadmethod)
-#	
