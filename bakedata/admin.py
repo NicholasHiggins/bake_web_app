@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Ingredient, Formula, Ratio, SoakerRatio
+from .models import Ingredient, Formula, Ratio, SoakerRatio, Load
 
 admin.site.register(Ingredient)
 
@@ -23,5 +23,12 @@ admin.site.register(Formula,FormulaAdmin)
 class SoakerRatioInline(admin.StackedInline):
 		model = SoakerRatio
 		extra = 1
+
+class LoadAdmin(admin.ModelAdmin):
+		fieldsets=[
+		(None, {'fields':('formula','loaf_mass','number_of_loaves')}),
+		]
+
+admin.site.register(Load,LoadAdmin)
 
 # Register your models here.

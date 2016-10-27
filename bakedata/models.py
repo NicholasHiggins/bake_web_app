@@ -83,4 +83,9 @@ class Load(models.Model):
 			s='soaker'+item.ingredient.name
 			T[s]=k*item.ratio*self.soaker_percent/100		
 		return T	
+	
+	def __str__(self):
+		return '{0} {1}kg loaves of {2}'.format(self.number_of_loaves,
+							self.loaf_mass,self.formula.name)
 
+	
