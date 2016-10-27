@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header_text %}Loads{% endblock %}
+
+{% block table %}
+	<table id='load_list_table'>
+	
+	{% for item in load_list %}
+	<tr><td>{{ item.name }}</td></tr>
+	{% endfor %}
+	</table>
+{% endblock %}
+
+

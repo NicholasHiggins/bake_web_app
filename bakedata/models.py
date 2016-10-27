@@ -85,7 +85,8 @@ class Load(models.Model):
 		return T	
 	
 	def __str__(self):
-		return '{0} {1}kg loaves of {2}'.format(self.number_of_loaves,
-							self.loaf_mass,self.formula.name)
-
+		return '{0} Loaves of {2} ({1} g).'.format(self.number_of_loaves,
+							int(self.loaf_mass*1000),self.formula.name)
+	def name(self):
+		return str(self)
 	

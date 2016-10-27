@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from .models import Load
+
 def index(request):
-	return HttpResponse('This is the index page, you shitbird!')
+	load_list_=Load.objects.all()
+	return render(request, 'index.html', {'load_list': load_list_})
 
 def ingredients_menu(request):
 	pass
