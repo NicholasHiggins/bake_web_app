@@ -13,7 +13,9 @@ class ModelsTestCase(TestCase):
 		self.r1=Ratio.objects.create(formula=self.f1,
 						ingredient=self.i1, ratio=100)		
 		self.r2=Ratio.objects.create(formula=self.f1,
-						ingredient=self.i2, ratio=65)
+						ingredient=self.i2, ratio=100)
+		self.l1=Load(formula=self.f1, loaf_mass=1,
+				number_of_loaves = 2)
 
 
 	def test_no_duplicate_formula_ingredient_ratios(self):
@@ -77,4 +79,13 @@ class ModelsTestCase(TestCase):
 		
 	def test_formula_method_total_percent(self):
 		t=self.f1.total_percent()
-		self.assertEqual(t,165)
+		self.assertEqual(t,200)
+
+	def test_Load_method_total_mass(self):
+		self.assertEqual(self.l1.total_mass(),2.0)
+
+	def test_Load_method_recipe(self):
+		K=self.l1.recipe()
+		self.assertEqual(K[self.i1.name],1)
+		self.assertEqual(K[self.i2.name],1)
+
