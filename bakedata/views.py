@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 def index(request):
-	pass
+	return HttpResponse('This is the index page, you shitbird!')
 
 def ingredients_menu(request):
 	pass
