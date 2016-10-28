@@ -89,4 +89,11 @@ class Load(models.Model):
 							int(self.loaf_mass*1000),self.formula.name)
 	def name(self):
 		return str(self)
+
+class Bake(models.Model):
+	loads = models.ManyToManyField(Load)
+	date_edited = models.DateField(auto_now=True)
+	
+#	def amount_used
+	
 	
