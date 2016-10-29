@@ -32,6 +32,7 @@ class ModelsTestCase(TestCase):
 						ingredient=self.i2, ratio=25)
 		self.l1=Load(formula=self.f1, loaf_mass=1,
 				number_of_loaves = 5)
+		self.b1=Bake.objects.create()
 
 
 	def test_no_duplicate_formula_ingredient_ratios(self):
@@ -108,4 +109,16 @@ class ModelsTestCase(TestCase):
 		K=self.l1.recipe()
 		self.assertEqual(K[self.i1.name],4)
 		self.assertEqual(K[self.i2.name],1)
+	
+	def test_load_has_id(self):
+		loadey=self.l1
+		self.assertEqual(loadey.id,1)
+	
+	def test_Bake_model_has_load(self):
+		bakey=self.b1
+		bakey
+		loadey=self.l1
+		print(loadey)
+		bakey.loads.add(loadey)
+		self.assertEqual(bakey.loads,loadey)
 

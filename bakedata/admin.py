@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Ingredient, Formula, Ratio, SoakerRatio, Load
+from .models import Ingredient, Formula, Ratio, SoakerRatio, Load, Bake
 
 admin.site.register(Ingredient)
 
@@ -30,5 +30,19 @@ class LoadAdmin(admin.ModelAdmin):
 		]
 
 admin.site.register(Load,LoadAdmin)
+
+class LoadsInLine(admin.TabularInline):
+		model = Bake.loads.through
+		extra = 0
+class BakeAdmin(admin.ModelAdmin):
+		inlines = [
+			LoadsInLine,
+			]
+		exclude = ('loads',)
+		def has_delete_permission(self, request,obj=None):
+			return True
+		
+
+admin.site.register(Bake,BakeAdmin)
 
 # Register your models here.
