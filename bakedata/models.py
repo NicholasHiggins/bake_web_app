@@ -67,6 +67,7 @@ class Load(models.Model):
 					max_digits=6,decimal_places=3)
 	number_of_loaves = models.IntegerField()
 	
+	
 	def total_mass(self):
 		return float(self.loaf_mass*self.number_of_loaves)
 
