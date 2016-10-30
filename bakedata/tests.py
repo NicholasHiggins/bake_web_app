@@ -22,6 +22,7 @@ class ModelsTestCase(TestCase):
 	def setUp(self):
 		self.i1=Ingredient.objects.create(name='ingredientONE',
 					amount=1234.56)
+		self.i1.save()
 		self.i2=Ingredient.objects.create(
 					name='ingredientTWO',amount=2222.22)	
 		self.f1=Formula.objects.create(name='formulaONE')		
@@ -32,8 +33,9 @@ class ModelsTestCase(TestCase):
 						ingredient=self.i2, ratio=25)
 		self.l1=Load(formula=self.f1, loaf_mass=1,
 				number_of_loaves = 5)
+		self.l1.save()
 		self.b1=Bake.objects.create()
-
+		self.b1.loads.add(self.l1)
 
 	def test_no_duplicate_formula_ingredient_ratios(self):
 		f1=Formula.objects.create(name='formulaONE')
@@ -110,15 +112,12 @@ class ModelsTestCase(TestCase):
 		self.assertEqual(K[self.i1.name],4)
 		self.assertEqual(K[self.i2.name],1)
 	
-	def test_load_has_id(self):
-		loadey=self.l1
-		self.assertEqual(loadey.id,1)
-	
 	def test_Bake_model_has_load(self):
-		bakey=self.b1
-		bakey
-		loadey=self.l1
-		print(loadey)
-		bakey.loads.add(loadey)
-		self.assertEqual(bakey.loads,loadey)
+		self.assertIn(self.l1,self.b1.loads.all())
 
+	def test_Bake_method_debit_ingredients(self):
+		self.b1.debit_ingredients()
+		self.i1.refresh_from_db()
+		self.i2.refresh_from_db()	
+		self.assertEqual(self.i1.amount,1230.56)
+		self.assertEqual(self.i2.amount,2221.22)

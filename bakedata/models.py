@@ -3,13 +3,15 @@ from django.db import models
 
 class Ingredient(models.Model):
 	name=models.CharField(max_length=30)
-	amount=models.DecimalField(max_digits=6,decimal_places=2)
+	amount=models.FloatField()
 
 	def __str__(self):
 		return self.name
 
 	def debit(self,value):
-		self.amount= round(self.amount-value,2)
+		self.amount = round(self.amount-value,2)
+		self.save(update_fields=['amount'])
+		
 
 class Formula(models.Model):
 	# represents the baker's percentage relationship between 
@@ -82,7 +84,7 @@ class Load(models.Model):
 		for item in SoakerRatio.objects.filter(
 						formula__exact=self.formula):
 			s='soaker'+item.ingredient.name
-			T[s]=k*item.ratio*self.soaker_percent/100		
+			T[s]=k*float(item.ratio)*float(self.soaker_percent)/100		
 		return T	
 	
 	def __str__(self):
@@ -95,6 +97,12 @@ class Bake(models.Model):
 	loads = models.ManyToManyField(Load)
 	date_edited = models.DateField(auto_now=True)
 	
-#	def amount_used
-	
+	def debit_ingredients(self):
+		for load in self.loads.all():
+			K=load.recipe()
+			for item in K:			
+				s=Ingredient.objects.get(name__exact=item)				
+				s.debit(K[item])
+				
+
 	
