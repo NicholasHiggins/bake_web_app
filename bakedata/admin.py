@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 
 from .models import Ingredient, Formula, Ratio, SoakerRatio, Load, Bake
 
@@ -39,8 +40,13 @@ class BakeAdmin(admin.ModelAdmin):
 			LoadsInLine,
 			]
 		exclude = ('loads',)
+		actions = ['view_bake_object']
 		def has_delete_permission(self, request,obj=None):
 			return True
+
+		def view_bake_object(modeladmin, request, queryset):
+			return HttpResponseRedirect('/bakedata/bake/{0}/view/'.format(queryset.get().id))
+		view_bake_object.short_description = 'View the bake'
 		
 
 admin.site.register(Bake,BakeAdmin)
