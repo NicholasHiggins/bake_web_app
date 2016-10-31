@@ -15,10 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from bakedata import views as bakedata_views
-
 
 urlpatterns = [
-	url(r'^bakedata/', bakedata_views.index,name ='index'),
+	url(r'^bakedata/', include('bakedata.urls', namespace='bakedata')),
     url(r'^admin/', include(admin.site.urls)),
 ]

@@ -73,7 +73,7 @@ class Load(models.Model):
 	def total_mass(self):
 		return float(self.loaf_mass*self.number_of_loaves)
 
-	def recipe(self):
+	def recipe_calc(self):
 	# returns a dictionary with formula ingredient keys and 
 	# calculated values. This will be displayed in views.
 		k=float(self.total_mass()/self.formula.total_percent())
@@ -86,7 +86,8 @@ class Load(models.Model):
 			s='soaker'+item.ingredient.name
 			T[s]=k*float(item.ratio)*float(self.soaker_percent)/100		
 		return T	
-	
+	recipe = property(recipe_calc)	
+
 	def __str__(self):
 		return '{0} Loaves of {2} ({1} g).'.format(self.number_of_loaves,
 							int(self.loaf_mass*1000),self.formula.name)
@@ -96,13 +97,17 @@ class Load(models.Model):
 class Bake(models.Model):
 	loads = models.ManyToManyField(Load)
 	date_edited = models.DateField(auto_now=True)
-	
+	name = models.CharField(max_length=30)
+
 	def debit_ingredients(self):
 		for load in self.loads.all():
 			K=load.recipe()
 			for item in K:			
 				s=Ingredient.objects.get(name__exact=item)				
 				s.debit(K[item])
+
+	def __str__(self):
+		return '{0} {1}'.format(self.name,self.date_edited)
 				
 
 	
