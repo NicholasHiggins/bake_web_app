@@ -40,15 +40,19 @@ class BakeAdmin(admin.ModelAdmin):
 			LoadsInLine,
 			]
 		exclude = ('loads',)
-		actions = ['view_bake_object']
+		actions = ['view_bake_leaven_schedule','view_bake_object']
 		def has_delete_permission(self, request,obj=None):
 			return True
 
-		def view_bake_object(modeladmin, request, queryset):
-			
-			return HttpResponseRedirect('/bakedata/bake/{0}/view/'.format(queryset.all()[0].id))
-		view_bake_object.short_description = 'View the bake. Note bake is singular!'
+		def view_bake_object(self, request, queryset):			
+			return HttpResponseRedirect('/bakedata/bake/{0}/view/'.format(
+						queryset.all()[0].id))
+		view_bake_object.short_description = 'View the bake. Only one!'
 		
+		def view_bake_leaven_schedule(self, request, queryset):
+			return HttpResponseRedirect('/bakedata/bake/{0}/leaven_schedule/'.
+						format(queryset.all()[0].id))
+		view_bake_leaven_schedule.shortdescription = 'View leaven schedule'
 
 admin.site.register(Bake,BakeAdmin)
 

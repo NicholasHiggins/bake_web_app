@@ -59,9 +59,11 @@ def leaven_schedule(request,bake_id):
 	t_60=t_time-5*time_delta
 	t_60=t_60.strftime('%A %b %d at %H:%M')
 	t_time=t_time.strftime('%A %b %d at %H:%M')
-	loads=[(d60,t_60),(d48,t_48),(d36,t_36),(d24,t_24),(d12,t_12)]
-	 #convert t_time to string 
+	loads=[(d60,t_60),(d48,t_48),(d36,t_36),(d24,t_24),(d12,t_12)] 
 	# clean up, we're finished with these loads	
+	# actually don't know if we can delete these loads, best to perhaps
+	# just keep them hidden in admin. Turns out they don't show up in admin
+	# probably because I never call the save function. hmmmm
 #	d12.delete()
 #	d24.delete()
 #	d36.delete()
