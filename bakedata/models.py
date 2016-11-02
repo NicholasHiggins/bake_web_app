@@ -3,7 +3,7 @@ from django.db import models
 
 class Ingredient(models.Model):
 	name=models.CharField(max_length=30)
-	amount=models.FloatField()
+	amount=models.FloatField(null=True,blank=True)
 
 	def __str__(self):
 		return self.name
@@ -11,6 +11,9 @@ class Ingredient(models.Model):
 	def debit(self,value):
 		self.amount = round(self.amount-value,2)
 		self.save(update_fields=['amount'])
+
+	class Meta:
+		ordering = ['-name']
 		
 
 class Formula(models.Model):
@@ -33,7 +36,6 @@ class Formula(models.Model):
 						formula__exact=self):
 			p+=float(item.ratio)
 		return p
-		
 
 class Ratio(models.Model):
 	ingredient = models.ForeignKey(Ingredient)
@@ -80,34 +82,49 @@ class Load(models.Model):
 		T={}
 		for item in Ratio.objects.filter(
 						formula__exact=self.formula):
-			T[item.ingredient.name]=k*float(item.ratio)
+			T[item.ingredient.name]=round(k*float(item.ratio),3)
 		for item in SoakerRatio.objects.filter(
 						formula__exact=self.formula):
-			s='soaker'+item.ingredient.name
-			T[s]=k*float(item.ratio)*float(self.soaker_percent)/100		
+			s='Soaker '+item.ingredient.name
+			T[s]=round(k*float(item.ratio)*float(self.formula.soaker_percent)/100,3)		
 		return T	
 	recipe = property(recipe_calc)	
 
 	def __str__(self):
-		return '{0} Loaves of {2} ({1} g).'.format(self.number_of_loaves,
+		return '{0} Loaves of {2} ({1} g)'.format(self.number_of_loaves,
 							int(self.loaf_mass*1000),self.formula.name)
 	def name(self):
+		# Is this even used?
 		return str(self)
+
+	def print_load(self):
+		for name in self.recipe:
+			print('{0:<20} {1:>12}'.format(name,self.recipe[name]))
+	readout=property(print_load)
+
 
 class Bake(models.Model):
 	loads = models.ManyToManyField(Load)
-	date_edited = models.DateField(auto_now=True)
+	date_of_bake = models.DateTimeField()
 	name = models.CharField(max_length=30)
+
 
 	def debit_ingredients(self):
 		for load in self.loads.all():
-			K=load.recipe()
+			K=load.recipe
 			for item in K:			
 				s=Ingredient.objects.get(name__exact=item)				
 				s.debit(K[item])
 
 	def __str__(self):
-		return '{0} {1}'.format(self.name,self.date_edited)
-				
+		return '{0} {1}'.format(self.name,self.date_of_bake.strftime('%A %b %d at %H:%M'))
+
+	def amount_needed(self,ingredient):
+		amount_needed=0
+		for load in self.loads.all():
+			K=load.recipe
+			if ingredient.name in K:
+				amount_needed+=K[ingredient.name]
+		return amount_needed	
 
 	

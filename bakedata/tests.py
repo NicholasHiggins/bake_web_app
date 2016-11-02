@@ -3,6 +3,8 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.core.urlresolvers import resolve
 
+import datetime
+
 from bakedata.models import *
 from bakedata.views import index
 
@@ -34,7 +36,7 @@ class ModelsTestCase(TestCase):
 		self.l1=Load(formula=self.f1, loaf_mass=1,
 				number_of_loaves = 5)
 		self.l1.save()
-		self.b1=Bake.objects.create()
+		self.b1=Bake.objects.create(date_of_bake=datetime.datetime.now())
 		self.b1.loads.add(self.l1)
 
 	def test_no_duplicate_formula_ingredient_ratios(self):
@@ -108,7 +110,7 @@ class ModelsTestCase(TestCase):
 		self.assertEqual(self.l1.total_mass(),5.0)
 
 	def test_Load_method_recipe(self):
-		K=self.l1.recipe()
+		K=self.l1.recipe
 		self.assertEqual(K[self.i1.name],4)
 		self.assertEqual(K[self.i2.name],1)
 	
@@ -121,3 +123,7 @@ class ModelsTestCase(TestCase):
 		self.i2.refresh_from_db()	
 		self.assertEqual(self.i1.amount,1230.56)
 		self.assertEqual(self.i2.amount,2221.22)
+
+	def test_Bake_method_amount_needed(self):
+		k=self.b1.amount_needed(self.i1)
+		self.assertEqual(k,4)

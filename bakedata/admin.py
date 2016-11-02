@@ -15,7 +15,7 @@ class SoakerRatioInline(admin.StackedInline):
 	
 class FormulaAdmin(admin.ModelAdmin):
 		fieldsets=[
-		(None,		{'fields':['name']}),
+		(None,		{'fields':['name','soaker_percent']}),
 		]
 		inlines= [RatioInline,SoakerRatioInline]
 	
@@ -45,8 +45,9 @@ class BakeAdmin(admin.ModelAdmin):
 			return True
 
 		def view_bake_object(modeladmin, request, queryset):
-			return HttpResponseRedirect('/bakedata/bake/{0}/view/'.format(queryset.get().id))
-		view_bake_object.short_description = 'View the bake'
+			
+			return HttpResponseRedirect('/bakedata/bake/{0}/view/'.format(queryset.all()[0].id))
+		view_bake_object.short_description = 'View the bake. Note bake is singular!'
 		
 
 admin.site.register(Bake,BakeAdmin)
