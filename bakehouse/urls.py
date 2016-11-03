@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
 	url(r'^bakedata/', include('bakedata.urls', namespace='bakedata')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls), name='admin'),
 ]

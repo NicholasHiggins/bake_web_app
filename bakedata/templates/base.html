@@ -3,6 +3,9 @@
 	<title>Bakehouse</title>
 </head>
 <body>
+	<a href="/admin/bakedata/bake/{{ bake.id }}">Admin</a>
+	<a href="{% url 'bakedata:view_bake' bake.id %}">View Bake</a>
+	<a href="{% url 'bakedata:leaven_schedule' bake.id %}">Leaven Schedule</a> 
 	<h1>{% block header_text %}{% endblock %}</h1>
 	{% block content %}
 	{% endblock %}

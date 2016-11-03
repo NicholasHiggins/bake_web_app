@@ -83,10 +83,15 @@ class Load(models.Model):
 		for item in Ratio.objects.filter(
 						formula__exact=self.formula):
 			T[item.ingredient.name]=round(k*float(item.ratio),3)
+		soaker_sum_percent=0
+		for item in SoakerRatio.objects.filter( 
+						formula__exact=self.formula):
+			soaker_sum_percent+=item.ratio # get total soaker percent
 		for item in SoakerRatio.objects.filter(
 						formula__exact=self.formula):
-			s='Soaker '+item.ingredient.name
-			T[s]=round(k*float(item.ratio)*float(self.formula.soaker_percent)/100,3)		
+			s='Soaker '+item.ingredient.name # find percent of total for item
+			T[s]=round(k*float(item.ratio/soaker_sum_percent)*float(
+							self.formula.soaker_percent),3)		
 		return T	
 	recipe = property(recipe_calc)	
 

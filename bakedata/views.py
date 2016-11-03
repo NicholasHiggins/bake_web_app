@@ -33,13 +33,15 @@ def leaven_schedule(request,bake_id):
 	revive = get_object_or_404(Formula, name__exact = 'Leaven Revive')
 	refresh = get_object_or_404(Formula, name__exact = 'Leaven Refresh')
 	store = get_object_or_404(Formula, name__exact = 'Leaven Store')
-	# now can calculate the different builds as loads	
+	# now can calculate the different builds as loads		
 	req_leaven= 1.07*(bake.amount_needed(leaven))
 	d12=Load(formula = build, loaf_mass = req_leaven, number_of_loaves = 1,)
 	# calculate the new req_leaven to build d12
 	req_leaven = 1.07*(d12.recipe['Leaven'])
-	if req_leaven < 0.370:
+	if req_leaven != 0 and req_leaven<0.370:
 		req_leaven=0.370
+	elif req_leaven == 0:
+		return render(request, 'no_leaven.html', {'bake':bake})	
 	# create the loads for the leaven stages in order to get the readout to display in view
 	d24=Load(formula = refresh, loaf_mass = req_leaven, number_of_loaves = 1)
 	d36=Load(formula = refresh, loaf_mass = 0.370, number_of_loaves = 1)
