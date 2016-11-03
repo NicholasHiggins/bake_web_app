@@ -18,7 +18,11 @@ def formulas_menu(request):
 def view_bake(request,bake_id):
 	bake=get_object_or_404(Bake,pk=bake_id)
 	loads=bake.loads.all()
-	return render(request, 'view_bake.html', {'bake': bake,'loads':loads})
+	recipes=[]	
+	for item in loads:
+		recipes.append(sorted(item.recipe.items(),reverse=True))
+	load_recipe=zip(loads,recipes)
+	return render(request, 'view_bake.html', {'bake': bake,'loads':loads,'recipes':recipes,'load_recipe':load_recipe})
 
 def bake_data(request,bake_id):
 	# will display the ingredients required for the bake, number of loaves
